@@ -14,3 +14,5 @@ Create a Custom Script called **psp-example** : \
   SBQQ__CustomerDiscount__c \
   **Quote Line Fields:** \
   SBQQ__ProductFamily__c \
+  
+In the Managed Package configuration, the value of the Quote Calculator Plugin should match the Custom Script name - 'psp-example' 
