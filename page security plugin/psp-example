@@ -1,0 +1,21 @@
+export function isFieldEditableForObject(fieldName, quoteOrLine, conn, objectName) {
+    
+    if (objectName === 'QuoteLine__c' && fieldName === 'Warranty_End_Date__c') {
+        debugger; 
+        if(quoteOrLine.SBQQ__ProductFamily__c !== 'Hardware') {
+            return false;
+        }
+    }
+    return true; 
+};
+
+export function isFieldVisibleForObject(fieldName, quoteOrLine, conn, objectName) {
+    
+    if (objectName === 'Quote__c' && fieldName === 'SBQQ__MarkupRate__c') {
+        debugger; 
+        if(quoteOrLine.SBQQ__CustomerDiscount__c >= 10) {
+            return false;
+        }
+    }
+    return true; 
+};
