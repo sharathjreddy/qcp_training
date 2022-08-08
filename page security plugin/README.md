@@ -2,7 +2,7 @@ Setup Instructions:
 
 SBQQ__QuoteLine__c:\
 Create field **Warranty End Date** \ 
-Replace **Additional Discount** with **Warranty End Date** in **Line Editor** field set \
+Replace **Additional Discount** with **Warranty End Date** in **Line Editor** field set 
   
 SBQQ__Quote__c:\ 
 Add field **Markup (%)** to **Line Editor** field set\  
