@@ -1,11 +1,23 @@
 Setup Instructions: 
+Create a Custom Object (with tab) - 
+Label: Partner Discount
+API Name: Partner_Discount
+
+Record Name: Partner Discount #
+Data Type: Auto Number 
+Format: {00000000}
+Starting value: 1
+
+Create 2 Fields - 
+Account : Lookup to Account object
+Discount : Percent(3,2)
+
+Create atleast one record - 
+a. Account - select the Account associated with the Quote that you are testing 
+b. Discount - Enter a Discount value 
 
 SBQQ__Quote__c:
-Create field **Warranty End Date** \
-Add field **SBQQ__PartnerDiscount__c** in **Line Editor** field set 
-  
-SBQQ__Quote__c:\
-Add field **Markup (%)** to **Line Editor** field set
+Add field **SBQQ__PartnerDiscount__c** to **Line Editor** field set 
   
 Create a Custom Script called **negotiated-discount** :  
   Paste the code in the file **negotiated-discount** into the **Code** field \
