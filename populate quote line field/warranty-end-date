@@ -1,1 +1,76 @@
-x
+
+export function isFieldEditableForObject(fieldName, quoteOrLine, conn, objectName) {
+    
+    console.log('isFieldEditableForObject'); 
+    console.log('field name: ' + fieldName);
+
+    if (objectName === 'QuoteLine__c' && fieldName === 'Warranty_End_Date__c') {
+        
+        if(quoteOrLine.SBQQ__ProductFamily__c !== 'Hardware') {
+            return false;
+        }
+    }
+    return true; 
+}
+
+export function onInit(quoteLineModels, conn) {
+    console.log('onInit()', quoteLineModels, conn); 
+    return Promise.resolve();
+}
+
+export function onBeforeCalculate(quoteModel, quoteLineModels, conn) {
+    console.log('onBeforeCalculate()', quoteModel, quoteLineModels, conn);
+    return Promise.resolve();
+}
+
+export function onBeforePriceRules(quoteModel, quoteLineModels, conn) {
+    console.log('onBeforePriceRules()', quoteModel, quoteLineModels, conn);
+    return Promise.resolve();
+}
+
+export function onAfterPriceRules(quoteModel, quoteLineModels, conn) {
+    console.log('onAfterPriceRules()', quoteModel, quoteLineModels, conn);   
+    return Promise.resolve();
+}
+
+export function onAfterCalculate(quoteModel, quoteLineModels, conn) {
+
+    console.log('onAfterCalculate()', quoteModel, quoteLineModels, conn);
+
+    var oneYearFromNow = new Date();
+    oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+
+    debugger; 
+    quoteLineModels.forEach(line => {
+        if (line.record.SBQQ__ProductFamily__c === 'Hardware') { 
+            let endDate = line.record.Warranty_End_Date__c; 
+            if (!endDate) {
+                line.record.Warranty_End_Date__c = toApexDate(oneYearFromNow); 
+            }
+        }
+    });
+        
+    return Promise.resolve();
+}
+
+export function printRecords(obj) {
+    obj = Array.isArray(obj) ? obj : [obj];
+    console.log(obj.map(obj => obj.record));
+}
+
+/**
+ * Takes a JS Date object and turns it into a string of the type 'YYYY-MM-DD', which is what Apex is expecting.
+ * @param {Date} date The date to be stringified
+ * @returns {string}
+ */
+ function toApexDate(/*Date*/ date) {
+    if (date == null) {
+        return null;
+    }
+    // Get the ISO formatted date string.
+    // This will be formatted: YYYY-MM-DDTHH:mm:ss.sssZ
+    var dateIso = date.toISOString();
+
+    // Replace everything after the T with an empty string
+    return dateIso.replace(new RegExp('[Tt].*'), "");
+}
