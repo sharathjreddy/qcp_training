@@ -1,0 +1,53 @@
+
+export function isFieldEditableForObject(fieldName, quoteOrLine, conn, objectName) {
+    
+    if (objectName === 'Quote__c' && fieldName === 'SBQQ__PartnerDiscount__c') {
+        return false;
+    }
+    return true; 
+};
+
+export function onInit(quoteLineModels, conn) {
+    console.log('onInit()', quoteLineModels, conn);
+    return Promise.resolve();
+}
+
+export function onBeforePriceRules(quoteModel, quoteLineModels, conn) {
+    console.log('onBeforePriceRules()', quoteModel, quoteLineModels, conn);
+    return Promise.resolve();
+}
+
+export function onAfterPriceRules(quoteModel, quoteLineModels, conn) {
+    console.log('onAfterPriceRules()', quoteModel, quoteLineModels, conn);
+    return Promise.resolve();
+}
+
+export function onBeforeCalculate(quoteModel, quoteLineModels, conn) {
+
+    debugger; 
+    let accountId = quoteModel.record['SBQQ__Account__c']; 
+    
+    let soql = `select Id, Discount__c, Account__c from Partner_Discount__c WHERE Account__c = "${accountId}" `; 
+    soql = soql.replace(/"/g, "'");
+
+    return conn.query(soql)
+        .then(function(results) {
+               
+                if (results.totalSize > 0) {
+                    let discount = results.records[0].Discount__c; 
+                    quoteModel.record['SBQQ__PartnerDiscount__c'] = discount;   
+                }
+                else {
+                    quoteModel.record['SBQQ__PartnerDiscount__c'] = 0; 
+                }
+        });
+        
+
+    //return Promise.resolve(); 
+}
+
+
+export function printRecords(obj) {
+    obj = Array.isArray(obj) ? obj : [obj];
+    console.log(obj.map(obj => obj.record));
+}
