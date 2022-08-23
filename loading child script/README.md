@@ -20,4 +20,8 @@ Create a Custom Script called **parent-script** :
     
 In the Managed Package configuration, the value of the **Quote Calculator Plugin** should match the Custom Script name - 'parent-script' 
 
-Search for the Quote Q-00021 and open it in the Quote Line Editor
+Search for the Quote Q-00021 and open it in the Quote Line Editor  
+Hit the Calculate button  
+a. If the **Warranty End Date** field for SMARTPHONE6 is blank, it will be populated with a date one year and one day from today   
+b. The **Has Warranty** field on the Quote will be checked 
+
