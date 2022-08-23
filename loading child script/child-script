@@ -1,0 +1,29 @@
+//function onAfterCalculate(quoteModel, quoteLineModels, conn) {
+
+    console.log('onAfterCalculate()', quoteModel, quoteLineModels, conn);
+    debugger; 
+    
+    var oneYearFromNow = new Date();
+    oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+
+    let hasWarranty = false; 
+    quoteLineModels.forEach(line => {
+        if (line.record['SBQQ__ProductFamily__c'] === 'Hardware') { 
+            let endDate = line.record['Warranty_End_Date__c']; 
+            if (!endDate) {
+                let dateIsoFormat = oneYearFromNow.toISOString();
+                // Replace everything after the T with an empty string
+                let dateSFFormat = dateIsoFormat.replace(new RegExp('[Tt].*'), "");
+                line.record['Warranty_End_Date__c'] = dateSFFormat; 
+            }
+            hasWarranty = true; 
+        }
+    });
+
+    if (hasWarranty) {
+        debugger; 
+        quoteModel.record['Has_Warranty__c'] = true; 
+    }
+        
+    return Promise.resolve(); 
+//}
