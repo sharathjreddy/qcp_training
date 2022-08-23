@@ -1,0 +1,46 @@
+
+export function isFieldEditableForObject(fieldName, quoteOrLine, conn, objectName) {
+    
+    console.log('isFieldEditableForObject'); 
+    console.log('field name: ' + fieldName);
+
+    if (objectName === 'QuoteLine__c' && fieldName === 'Warranty_End_Date__c') {
+        
+        if(quoteOrLine.SBQQ__ProductFamily__c !== 'Hardware') {
+            return false;
+        }
+    }
+    
+    if (objectName === 'Quote__c' && fieldName === 'Has_Warranty__c') {
+        return false;        
+    }
+
+    return true; 
+}
+
+let childScript; 
+export function onInit(quoteLineModels, conn) {
+    console.log('onInit()', quoteLineModels, conn); 
+    debugger; 
+    return conn.sobject("SBQQ__CustomScript__c")
+	    .find (
+            // conditions in JSON object
+            {  Name : 'child-script' }, 
+            'Id, Name, sbqq__code__c'
+        ).execute (function(err, res) {
+            if (err) { return console.error(err); }
+            childScript = res[0].SBQQ__Code__c;
+	    }); 	
+}
+
+export function onAfterCalculate(quoteModel, quoteLineModels, conn) {
+
+    console.log('onAfterCalculate()', quoteModel, quoteLineModels, conn);
+    debugger; 
+    
+    var childFunction = new Function('quoteModel', 'quoteLineModels', 'conn', childScript);
+    childFunction(quoteModel, quoteLineModels, conn); 
+    
+    return Promise.resolve(); 
+}
+
